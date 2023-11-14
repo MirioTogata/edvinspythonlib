@@ -11,11 +11,10 @@ pip install edvinspythonlib
 How to use one of my functions or classes in your own code
 
 ```Python
-import edvinspythonlib as edv
-
 # Import one of the modules
-from edvinspythonlib import multiplication
+from edvinspythonlib import machinelearning as ml
+
 
 # Call the multiplication method
-result = multiplication(2, 3)
+result = ml.multiplication(2, 3)
 ```
