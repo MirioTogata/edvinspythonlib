@@ -2,6 +2,8 @@ from setuptools import find_packages, setup
 from codecs import open
 from os import path
 
+#python3 setup.py sdist bdist_wheel
+#twine check dist/*
 #twine upload dist/*
 
 # The directory containing this file

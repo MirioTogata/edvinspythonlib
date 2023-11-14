@@ -10,3 +10,7 @@ def multiplication(x,y):
 def addition(x,y):
     '''Adds 2 numbers'''
     return x+y
+
+def subtraction(x,y):
+    '''Subtracts 2 numbers'''
+    return x-y
