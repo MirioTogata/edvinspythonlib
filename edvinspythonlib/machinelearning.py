@@ -14,3 +14,7 @@ def addition(x,y):
 def subtraction(x,y):
     '''Subtracts 2 numbers'''
     return x-y
+
+def division(x,y):
+    '''Divides 2 numbers'''
+    return x/y
