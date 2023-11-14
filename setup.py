@@ -5,6 +5,7 @@ from os import path
 #python3 setup.py sdist bdist_wheel
 #twine check dist/*
 #twine upload dist/*
+#twine upload --skip-existing dist/*
 
 # The directory containing this file
 HERE = path.abspath(path.dirname(__file__))
@@ -16,7 +17,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 setup(
     name='edvinspythonlib',
     packages=find_packages(include=['edvinspythonlib']),
-    version='0.1.3',
+    version='0.1.5',
     description='My first Python library',
     author='Me',
     install_requires=['numpy','pandas','matplotlib'],
