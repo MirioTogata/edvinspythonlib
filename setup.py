@@ -1,7 +1,8 @@
 from setuptools import find_packages, setup
-
 from codecs import open
 from os import path
+
+#twine upload dist/*
 
 # The directory containing this file
 HERE = path.abspath(path.dirname(__file__))
