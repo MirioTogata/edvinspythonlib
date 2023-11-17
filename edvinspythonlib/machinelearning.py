@@ -73,6 +73,13 @@ class linearRegression:
         plt.ylabel('Residual')
         plt.show()
 
+'''
+WIP Regression:
+
+class NeuralNetwork
+'''
+
+
 #classification WIP
 '''
 class logisticRegression:
