@@ -20,7 +20,7 @@ setup(
     version='0.1.8',
     description='My first Python library',
     author='Me',
-    install_requires=['numpy','pandas','matplotlib'],
+    install_requires=['numpy','pandas','matplotlib','scikit-learn'],
     tests_require=['pytest == 4.4.1'],
     setup_requires=['pytest-runner == 4.4'],
     test_suite='tests',
