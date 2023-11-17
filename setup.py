@@ -17,7 +17,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 setup(
     name='edvinspythonlib',
     packages=find_packages(include=['edvinspythonlib']),
-    version='0.1.8',
+    version='0.1.9',
     description='My first Python library',
     author='Me',
     install_requires=['numpy','pandas','matplotlib','scikit-learn'],
