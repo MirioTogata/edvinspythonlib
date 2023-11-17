@@ -5,20 +5,30 @@ Functions and classes for course Machine Learning and Data Mining
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+from sklearn.decomposition import PCA
 
 #data science
 def standardizedata(variable):
         '''Standardizes the variable'''
         return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
 
-def PCA(X, components="all", explainedvar = 1):
+def PCAe(X, components=2):
     '''
     Performs principal component analysis on the data X
-    Returns the components and eigenvalues in order of most to least important
-    Returns as many components as specified or until it's hit the explained variance
+    Returns the components and explained varience ratio
     '''
     #standardize data
     X = standardizedata(X)
+    
+    #do pca on X
+    pca = PCA(n_components=components)
+    X = pca.fit_transform(X)
+
+    #return components and explanied vaiance ratio
+    return X, pca.explained_variance_ratio_
+
+
+#Fit fourier series to signal
 
 #regression
 class linearRegression:
@@ -26,7 +36,7 @@ class linearRegression:
     Linear regression class
     Uses methods of:
     fit(Xtrain,ytrain,reg=0,standardize=False)
-    predict(Xtest,standardize=False)
+    predict(Xtest)
     residualPlot(Xtest,ytest,yrange=10)
     '''
     def __init__(self):
