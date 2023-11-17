@@ -16,5 +16,7 @@ from edvinspythonlib import machinelearning as ml
 
 
 # Call the multiplication method
-result = ml.multiplication(2, 3)
+model = ml.linearRegression()
+model.fit(X,y)
+model.residualPlot(X,y)
 ```

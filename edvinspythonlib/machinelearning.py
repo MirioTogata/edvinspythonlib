@@ -4,15 +4,18 @@ Functions and classes for course Machine Learning and Data Mining
 '''
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 class linearRegression:
     '''Linear regression class
     Uses methods of:
-    fit(Xtrain,ytrain,reg=0,normX=False,normy=False)
+    fit(Xtrain,ytrain,reg=0,stanrdardize=False)
     predict(Xtest,standardize=False)
+    residualPlot(Xtest,ytest,yrange=10)
     '''
     def __init__(self):
         self.w = np.array([])
+        self.standardize = False
     
     def fit(self,Xtrain,ytrain,reg=0, standardize=False):
         '''
@@ -42,13 +45,14 @@ class linearRegression:
         Xtest = np.append(np.ones((Xtest.shape[0],1)),Xtest,axis=1)
         return np.dot(Xtest,self.w)
     
-    def residualPlot(self,Xtest,ytest):
+    def residualPlot(self,Xtest,ytest,yrange = 10):
         '''Plots residuals of the model'''
-        if self.standardize:
-            Xtest = standardizedata(Xtest)
-            ytest = standardizedata(ytest)
         ypred = self.predict(Xtest)
+        for i in range(len(ypred)):
+            ypred[i] = ypred[i]+random.uniform(-0.3,0.3)
         plt.scatter(ypred,ytest-ypred)
+        plt.ylim(-yrange,yrange)
+        plt.plot([min(ypred),max(ypred)],[0,0],color='black',linestyle='--')
         plt.xlabel('Predicted')
         plt.ylabel('Residual')
         plt.show()
