@@ -6,6 +6,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
+#data science
+def standardizedata(variable):
+        '''Standardizes the variable'''
+        return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
+
+def PCA(X, components="all", explainedvar = 1):
+    '''
+    Performs principal component analysis on the data X
+    Returns the components and eigenvalues in order of most to least important
+    Returns as many components as specified or until it's hit the explained variance
+    '''
+    #standardize data
+    X = standardizedata(X)
+
+
+
+#regression
 class linearRegression:
     '''Linear regression class
     Uses methods of:
@@ -57,9 +74,23 @@ class linearRegression:
         plt.ylabel('Residual')
         plt.show()
 
-def standardizedata(variable):
-        '''Standardizes the variable'''
-        return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
+#classification WIP
+'''
+class logisticRegression:
 
+class KNN
+
+class NaiveBayes
+
+class DecisionTree
+
+class RandomForest
+
+class SVM
+
+class NeuralNetwork
+
+class Kmeans
+'''
 
 
