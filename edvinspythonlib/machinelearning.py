@@ -20,8 +20,6 @@ def PCA(X, components="all", explainedvar = 1):
     #standardize data
     X = standardizedata(X)
 
-
-
 #regression
 class linearRegression:
     '''
@@ -75,9 +73,21 @@ class linearRegression:
         plt.ylabel('Residual')
         plt.show()
 
-def standardizedata(variable):
-        '''Standardizes the variable'''
-        return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
+#classification WIP
+'''
+class logisticRegression:
 
+class KNN
 
+class NaiveBayes
 
+class DecisionTree
+
+class RandomForest
+
+class SVM
+
+class NeuralNetwork
+
+class Kmeans
+'''
