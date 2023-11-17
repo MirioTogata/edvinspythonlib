@@ -24,9 +24,10 @@ def PCA(X, components="all", explainedvar = 1):
 
 #regression
 class linearRegression:
-    '''Linear regression class
+    '''
+    Linear regression class
     Uses methods of:
-    fit(Xtrain,ytrain,reg=0,stanrdardize=False)
+    fit(Xtrain,ytrain,reg=0,standardize=False)
     predict(Xtest,standardize=False)
     residualPlot(Xtest,ytest,yrange=10)
     '''
@@ -74,23 +75,9 @@ class linearRegression:
         plt.ylabel('Residual')
         plt.show()
 
-#classification WIP
-'''
-class logisticRegression:
+def standardizedata(variable):
+        '''Standardizes the variable'''
+        return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
 
-class KNN
-
-class NaiveBayes
-
-class DecisionTree
-
-class RandomForest
-
-class SVM
-
-class NeuralNetwork
-
-class Kmeans
-'''
 
 
