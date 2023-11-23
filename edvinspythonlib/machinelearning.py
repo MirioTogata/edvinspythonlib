@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 from sklearn.decomposition import PCA
+from sklearn import model_selection
 
 #data science
 def standardizedata(variable):
@@ -27,10 +28,48 @@ def PCAe(X, components=2):
     #return components and explanied vaiance ratio
     return X, pca.explained_variance_ratio_
 
+#k-fold cross validation
+def kFoldCV(Xtrain,ytrain,k,modelClass, params):
+    CV = model_selection.KFold(n_splits=k,shuffle=True)
+    err = []
+    for train_index,test_index in CV.split(Xtrain,ytrain):
+        X_train = Xtrain[train_index]
+        y_train = ytrain[train_index]
+        X_test = Xtrain[test_index]
+        y_test = ytrain[test_index]
 
-#Fit fourier series to signal
+        model = modelClass()
+        model.fit(X_train,y_train,params)
+        MSE = sum(np.power(y_test-model.predict(X_test),2))
+        err.append(MSE)
+    
+    return np.mean(err)
 
 #regression
+class baselineRegression:
+    '''
+    Baseline regression class
+    '''
+    def __init__(self):
+        self.w = None
+
+    def fit(self,Xtrain,ytrain,param):
+        self.w = np.mean(ytrain)
+    
+    def predict(self,Xtest):
+        return self.w*np.ones(np.shape(Xtest,axis=0))
+    
+    def residualPlot(self,Xtest,ytest,yrange=10):
+        ypred = self.predict(Xtest)
+        for i in range(len(ypred)):
+            ypred[i] = ypred[i]+random.uniform(-0.3,0.3)
+        plt.scatter(ypred,ytest-ypred)
+        plt.ylim(-yrange,yrange)
+        plt.plot([min(ypred),max(ypred)],[0,0],color='black',linestyle='--')
+        plt.xlabel('Predicted')
+        plt.ylabel('Residual')
+        plt.show()
+
 class linearRegression:
     '''
     Linear regression class
@@ -83,12 +122,11 @@ class linearRegression:
         plt.ylabel('Residual')
         plt.show()
 
-'''
-WIP Regression:
+class ANN:
+    def __init__(self):
+        print("WIP!!")
 
-class NeuralNetwork
-'''
-
+#Fit fourier series to signal WIP
 
 #classification WIP
 '''
