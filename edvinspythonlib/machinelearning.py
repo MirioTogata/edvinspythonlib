@@ -13,22 +13,6 @@ def standardizedata(variable):
         '''Standardizes the variable'''
         return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
 
-def PCAe(X, components=2):
-    '''
-    Performs principal component analysis on the data X
-    Returns the components and explained varience ratio
-    '''
-    #standardize data
-    X = standardizedata(X)
-    
-    #do pca on X
-    pca = PCA(n_components=components)
-    X = pca.fit_transform(X)
-
-    #return components and explanied vaiance ratio
-    return X, pca.explained_variance_ratio_
-
-#k-fold cross validation
 def kFoldCV(Xtrain,ytrain,k,modelClass, params):
     CV = model_selection.KFold(n_splits=k,shuffle=True)
     err = []
@@ -40,10 +24,35 @@ def kFoldCV(Xtrain,ytrain,k,modelClass, params):
 
         model = modelClass()
         model.fit(X_train,y_train,params)
-        MSE = sum(np.power(y_test-model.predict(X_test),2))
+        MSE = np.mean(np.power(model.predict(X_test)-y_test,2))
         err.append(MSE)
     
     return np.mean(err)
+
+def nestedCV(X,y,kinner,outersplits, modelClass, hparams):
+    '''
+    nested cross validation function.
+    kinner is how many inner folds (integer), 
+    while outersplits is the sklearn.model_selection.KFold
+    '''
+    opt = []
+    for train_index,test_index in outersplits.split(X,y):
+        X_train = X[train_index]
+        y_train = y[train_index]
+        X_test = X[test_index]
+        y_test = y[test_index]
+        errs = {}
+        for param in hparams:
+            errs[param] = kFoldCV(X_train,y_train,kinner,modelClass,param)
+        if hparams == []:
+            errs[0] = kFoldCV(X_train,y_train,kinner,modelClass,0)
+        optparam = min(errs,key=errs.get)
+
+        finalmodel = modelClass()
+        finalmodel.fit(X_test,y_test,optparam)
+        MSE = np.mean(np.power(finalmodel.predict(X_test)-y_test,2))
+        opt.append((optparam,MSE))
+    return opt
 
 #regression
 class baselineRegression:
@@ -57,7 +66,7 @@ class baselineRegression:
         self.w = np.mean(ytrain)
     
     def predict(self,Xtest):
-        return self.w*np.ones(np.shape(Xtest,axis=0))
+        return self.w*np.ones(np.shape(Xtest)[0])
     
     def residualPlot(self,Xtest,ytest,yrange=10):
         ypred = self.predict(Xtest)
@@ -86,6 +95,7 @@ class linearRegression:
         '''
         Fits the model to the given data
         fitting does not stack and WILL overwrite previous fits
+        MAKE SURE DATA IS SHUFFLED
         '''
         #transform data
         self.standardize = standardize
@@ -100,7 +110,6 @@ class linearRegression:
         regI = reg*np.eye(XtX.shape[0])
         regI[0,0] = 0
         self.w = np.linalg.solve(XtX+regI,Xty).squeeze()
-
 
     def predict(self,Xtest):
         '''Predicts y based on sum of weights and X'''
@@ -124,9 +133,11 @@ class linearRegression:
 
 class ANN:
     def __init__(self):
-        print("WIP!!")
+        print("TBD!")
 
-#Fit fourier series to signal WIP
+class fourierSeries:
+    def __init__(self):
+        print("TBD!")
 
 #classification WIP
 '''
@@ -138,11 +149,12 @@ class NaiveBayes
 
 class DecisionTree
 
+class Kmeans
+
 class RandomForest
 
 class SVM
 
 class NeuralNetwork
 
-class Kmeans
 '''
