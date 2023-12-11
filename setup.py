@@ -6,6 +6,9 @@ from os import path
 #twine check dist/*
 #twine upload dist/*
 #twine upload --skip-existing dist/*
+
+#python -m twine check dist/*
+#python -m twine upload --skip-existing dist/*
 #
 # The directory containing this file
 HERE = path.abspath(path.dirname(__file__))
@@ -17,10 +20,10 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 setup(
     name='edvinspythonlib',
     packages=find_packages(include=['edvinspythonlib']),
-    version='0.1.9',
+    version='0.2.0',
     description='My first Python library',
     author='Me',
-    install_requires=['numpy','pandas','matplotlib','scikit-learn'],
+    install_requires=['numpy','pandas','matplotlib','scikit-learn','imageio','scikit-image'],
     tests_require=['pytest == 4.4.1'],
     setup_requires=['pytest-runner == 4.4'],
     test_suite='tests',
