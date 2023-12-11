@@ -10,10 +10,23 @@ from sklearn import model_selection
 
 #data science
 def standardizedata(variable):
-        '''Standardizes the variable'''
+        '''Standardizes the given variable to have mean 0 and std 1'''
         return (variable-np.mean(variable,axis=0))/np.std(variable,axis=0)
 
-def kFoldCV(Xtrain,ytrain,k,modelClass, params):
+def PCAe(X, components=2):
+    '''
+    Performs principal component analysis on the data X. 
+    Returns the components and explained varience ratio
+    '''
+    X = standardizedata(X)
+    pca = PCA(n_components=components)
+    X = pca.fit_transform(X)
+    return X, pca.explained_variance_ratio_
+
+def kFoldCV(Xtrain,ytrain,k,modelClass,hparam=0):
+    '''
+    K-fold cross validation function.
+    '''
     CV = model_selection.KFold(n_splits=k,shuffle=True)
     err = []
     for train_index,test_index in CV.split(Xtrain,ytrain):
@@ -23,35 +36,35 @@ def kFoldCV(Xtrain,ytrain,k,modelClass, params):
         y_test = ytrain[test_index]
 
         model = modelClass()
-        model.fit(X_train,y_train,params)
+        model.fit(X_train,y_train,hparam)
         MSE = np.mean(np.power(model.predict(X_test)-y_test,2))
         err.append(MSE)
-    
     return np.mean(err)
 
-def nestedCV(X,y,kinner,outersplits, modelClass, hparams):
+def nestedCV(X,y,kinner,kouter, modelClasses, hparams):
     '''
-    nested cross validation function.
-    kinner is how many inner folds (integer), 
-    while outersplits is the sklearn.model_selection.KFold
+    Nested cross validation function.
+    Returns how models performed for optimal hyperparameter, and the optimal hyperparameter.
     '''
     opt = []
-    for train_index,test_index in outersplits.split(X,y):
-        X_train = X[train_index]
-        y_train = y[train_index]
-        X_test = X[test_index]
-        y_test = y[test_index]
-        errs = {}
-        for param in hparams:
-            errs[param] = kFoldCV(X_train,y_train,kinner,modelClass,param)
-        if hparams == []:
-            errs[0] = kFoldCV(X_train,y_train,kinner,modelClass,0)
-        optparam = min(errs,key=errs.get)
+    CV = model_selection.KFold(n_splits=kouter,shuffle=True)
+    for modelClass in modelClasses:
+        for train_index,test_index in CV.split(X,y):
+            X_train = X[train_index]
+            y_train = y[train_index]
+            X_test = X[test_index]
+            y_test = y[test_index]
+            errs = {}
+            for param in hparams:
+                errs[param] = kFoldCV(X_train,y_train,kinner,modelClass,param)
+            if hparams == []:
+                errs[0] = kFoldCV(X_train,y_train,kinner,modelClass,0)
+            optparam = min(errs,key=errs.get)
 
-        finalmodel = modelClass()
-        finalmodel.fit(X_test,y_test,optparam)
-        MSE = np.mean(np.power(finalmodel.predict(X_test)-y_test,2))
-        opt.append((optparam,MSE))
+            finalmodel = modelClass()
+            finalmodel.fit(X_test,y_test,optparam)
+            MSE = np.mean(np.power(finalmodel.predict(X_test)-y_test,2))
+            opt.append((str(modelClass),optparam,MSE))
     return opt
 
 #regression
@@ -62,7 +75,7 @@ class baselineRegression:
     def __init__(self):
         self.w = None
 
-    def fit(self,Xtrain,ytrain,param):
+    def fit(self,Xtrain,ytrain,param=0):
         self.w = np.mean(ytrain)
     
     def predict(self,Xtest):

@@ -47,3 +47,4 @@ def SA(X,Y,d,A,order="ACGT"):
             M[i,j] = min(M[i-1,j]+d,M[i,j-1]+d,A[order.find(X[i-1]),order.find(Y[j-1])]+M[i-1,j-1])
 
     return M.T
+

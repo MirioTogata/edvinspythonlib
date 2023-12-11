@@ -1,1 +1,1 @@
-numpy, matplotlib, pandas,scikit-learn
+numpy, matplotlib, pandas,scikit-learn, scikit-image, imageio
